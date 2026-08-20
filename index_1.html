@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Megan Li - Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:          #faf4ea;
+    --bg2:         #f5ede0;
+    --purple:      #9b7fc8;
+    --purple-lt:   #c4b3df;
+    --purple-pale: #ede7f6;
+    --dark:        #2d2014;
+    --body:        #5c4d3c;
+    --muted:       #9b8670;
+    --tan:         #ddd0be;
+    --spring:      cubic-bezier(0.34,1.56,0.64,1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 18px; }
+  body { background: #eeeae3; font-family: 'Nunito', sans-serif; color: var(--dark); overflow-x: hidden; }
+
+  /* ═══ CARD SCENE (intro) ═══ */
+  .card-scene {
+    width:100vw; height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:36px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.5s ease;
+  }
+  .card-scene.fade-out { opacity: 0; pointer-events: none; }
+  /* Warm linen background */
+  .card-scene::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 42%, #f8f1e6 0%, #ecddd0 60%, #dfd0c2 100%);
+    pointer-events:none;
+  }
+
+  /* ── CARD STACK ── */
+  .card-stack {
+    position: relative;
+    width: 240px;
+    height: 330px;
+    z-index: 1;
+  }
+
+  /* Shared gingham style for all intro cards */
+  .intro-card {
+    position: absolute;
+    top: 0; left: 0;
+    width: 240px; height: 330px;
+    background-color: #c4b3df;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px),
+      repeating-linear-gradient(0deg,  rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 3px 6px 24px rgba(100,60,160,.22), 0 1px 4px rgba(0,0,0,.08);
+  }
+
+  /* Fan cards — start stacked behind the main card, animate out on open */
+  .fan-card {
+    transition: transform 0.95s var(--spring), opacity 0.4s ease;
+    transform-origin: 50% 85%;
+  }
+  .fan-card-1 { transition-delay: 0.05s; }
+  .fan-card-2 { transition-delay: 0.0s; }
+  .fan-card-3 { transition-delay: 0.10s; }
+
+  .card-scene.opening .fan-card-1 { transform: translateX(-190px) translateY(-60px) rotate(-20deg); }
+  .card-scene.opening .fan-card-2 { transform: translateY(-110px) rotate(-5deg); }
+  .card-scene.opening .fan-card-3 { transform: translateX(190px) translateY(-60px) rotate(16deg); }
+
+  /* Fan card inner (ruled paper look) */
+  .fan-card-inner {
+    background-color: #fffdf8;
+    border-radius: 3px;
+    height: 100%;
+    border: 1px solid rgba(155,127,200,.20);
+  }
+
+  /* Main card — on top, lifts on hover */
+  .main-intro-card {
+    z-index: 10;
+    transition: transform 0.45s var(--spring);
+  }
+  .card-scene:not(.opening):hover .main-intro-card { transform: translateY(-10px) scale(1.025); }
+
+  /* Main card inner */
+  .main-card-inner {
+    background-color: #fffdf8;
+    border-radius: 3px;
+    height: 100%;
+    border: 1px solid rgba(155,127,200,.20);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px;
+    padding: 24px 20px;
+  }
+  /* Corner decoration */
+  .main-card-inner::before, .main-card-inner::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: rgba(155,127,200,.4);
+    border-style: solid;
+  }
+  .main-card-inner::before { top: 16px; left: 16px; border-width: 1.5px 0 0 1.5px; }
+  .main-card-inner::after  { bottom: 16px; right: 16px; border-width: 0 1.5px 1.5px 0; }
+
+  .main-card-eyebrow {
+    font-family: 'Nunito', sans-serif;
+    font-size: .52rem; font-weight: 800;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--muted); opacity: .8;
+    margin-bottom: 4px;
+  }
+  .main-card-title {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem; font-weight: 700;
+    color: var(--dark); text-align: center;
+    line-height: 1.15;
+  }
+  .main-card-rule {
+    width: 36px; height: 1px;
+    background: rgba(155,127,200,.4);
+    margin: 6px 0;
+  }
+  .main-card-sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: .64rem; font-weight: 600;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* Hint text */
+  .open-hint { font-family:'Caveat',cursive; font-size:1.05rem; color:rgba(100,78,55,.5); animation:hint-float 2.2s ease-in-out infinite; position:relative; z-index:1; }
+  @keyframes hint-float { 0%,100%{transform:translateY(0);opacity:.45} 50%{transform:translateY(-7px);opacity:.75} }
+
+  /* ═══ PORTFOLIO ═══ */
+  .portfolio { display:none; background:var(--bg); }
+  .portfolio.visible { display:block; }
+
+  /* ── NAVBAR ── */
+  .navbar { background:var(--bg); border-bottom:2px solid var(--tan); padding:18px 80px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .nav-logo { font-family:'Nunito',sans-serif; font-size:1.4rem; font-weight:700; font-style:italic; color:var(--dark); }
+  .nav-tagline { font-size:.72rem; font-weight:700; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; margin-top:2px; }
+  .navbar-links { display:flex; gap:32px; list-style:none; align-items:center; }
+  .navbar-links a { font-size:.8rem; font-weight:700; letter-spacing:.06em; color:var(--body); text-decoration:none; text-transform:uppercase; transition:color .2s; }
+  .navbar-links a:hover { color:var(--purple); }
+  /* Tiny decorative cherry in navbar */
+  .nav-cherry { font-size:1rem; opacity:.45; }
+
+  /* ── HERO ── */
+  .hero {
+    background:var(--bg);
+    padding:80px 80px 96px;
+    display:flex; align-items:center; gap:72px;
+    position:relative;
+  }
+  .hero-left { flex:1; position:relative; }
+
+  /* "Preface" handwritten label */
+  .preface-label {
+    font-family:'Caveat',cursive;
+    font-size:1.2rem; color:var(--purple); font-weight:600;
+    letter-spacing:.06em; margin-bottom:10px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .preface-label::before,.preface-label::after { content:''; flex:0 0 24px; height:1px; background:var(--purple-lt); display:block; opacity:.7; }
+
+  @keyframes hero-rise {
+    0%   { opacity:0; transform: translateY(28px) scale(.96); }
+    60%  { opacity:1; transform: translateY(-6px) scale(1.015); }
+    80%  { transform: translateY(3px) scale(.998); }
+    100% { opacity:1; transform: translateY(0) scale(1); }
+  }
+  .hero-big {
+    font-family:'Caveat',cursive; font-size:4.8rem; font-weight:700; color:var(--dark); line-height:1.1; margin-bottom:22px;
+    animation: hero-rise 1.1s cubic-bezier(0.34,1.56,0.64,1) 0.25s both;
+  }
+
+  .hero-para { font-family:'Nunito',sans-serif; font-size:1rem; color:var(--body); line-height:1.8; font-weight:400; max-width:460px; margin-bottom:28px; }
+
+  .hero-ivey-card { background:var(--purple-pale); border-radius:16px; padding:16px 22px; display:flex; flex-direction:column; gap:10px; max-width:380px; box-shadow:0 2px 12px rgba(155,127,200,.18); border:1px solid rgba(155,127,200,.22); }
+  .ivey-logo { background:white; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 1px 6px rgba(0,0,0,.08); padding:8px 14px; width:fit-content; }
+  .ivey-text-label { font-family:'Nunito',sans-serif; font-size:.6rem; font-weight:800; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; margin-bottom:2px; }
+  .ivey-text-val   { font-family:'Nunito',sans-serif; font-size:.88rem; font-weight:700; color:var(--dark); line-height:1.35; }
+
+  /* Handwritten sticky note in hero */
+  .sticky-note {
+    position:absolute; top:-10px; right:-20px;
+    background:#fef9c3;
+    padding:14px 18px 18px;
+    border-radius:2px;
+    box-shadow:3px 4px 12px rgba(0,0,0,.12);
+    transform:rotate(3.5deg);
+    font-family:'Caveat',cursive;
+    font-size:1rem; color:#4a3a10; line-height:1.5;
+    max-width:160px;
+    z-index:5;
+  }
+  .sticky-note::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:rgba(255,220,40,.6); border-radius:2px 2px 0 0; }
+
+  .hero-right { flex:0 0 460px; display:flex; align-items:center; justify-content:flex-start; padding-left:24px; position:relative; }
+  /* Collage container holding back + front polaroid */
+  .polaroid-collage { position:relative; width:390px; height:420px; }
+  /* Back polaroid (peeking behind, slightly left and rotated) */
+  .polaroid-back {
+    position: absolute;
+    top: 20px; left: -30px;
+    width: 100%; max-width: 360px;
+    background: #fff;
+    padding: 16px 16px 52px;
+    border-radius: 4px;
+    box-shadow: 2px 5px 18px rgba(0,0,0,.1);
+    transform: rotate(-7deg);
+    z-index: 1;
+  }
+  .polaroid-back-img { width:100%; aspect-ratio:1; background:#e8e0d4; border-radius:2px; }
+  .polaroid-back-caption { position:absolute; bottom:14px; left:0; right:0; text-align:center; font-family:'Caveat',cursive; font-size:.9rem; color:rgba(120,100,80,.45); }
+  /* Front polaroid */
+  .polaroid-wrap {
+    position: absolute;
+    top: 0; left: 30px;
+    width: 100%; max-width: 360px;
+    cursor: pointer;
+    transition: transform .5s cubic-bezier(0.34,1.56,0.64,1);
+    transform: rotate(2.5deg);
+    user-select: none;
+    z-index: 2;
+  }
+  .polaroid-wrap:hover { transform: rotate(2.5deg) translateY(-5px) scale(1.02); }
+  .polaroid {
+    background: #fff;
+    padding: 18px 18px 58px;
+    border-radius: 4px;
+    box-shadow: 4px 8px 28px rgba(0,0,0,.16), 0 2px 6px rgba(0,0,0,.08);
+    position: relative;
+    width: 100%;
+  }
+  .polaroid-back::before { display:none; }
+  .polaroid-img { width:100%; aspect-ratio:1; border-radius:2px; display:flex; align-items:center; justify-content:center; font-family:'Caveat',cursive; font-size:1rem; color:rgba(100,85,70,.35); transition: background .4s; }
+  .polaroid-caption { position:absolute; bottom:18px; left:0; right:0; text-align:center; font-family:'Caveat',cursive; font-size:1rem; color:var(--muted); display:none; }
+  .polaroid-hint { position:absolute; bottom:4px; left:0; right:0; text-align:center; font-family:'Caveat',cursive; font-size:.6rem; color:rgba(155,127,200,.4); }
+
+
+  /* ── PROJECTS ── */
+  .projects-section { background:var(--bg2); padding-bottom:80px; }
+
+  .section-bar { padding:56px 80px 28px; display:flex; align-items:flex-end; justify-content:space-between; position:relative; overflow:hidden; }
+  .section-bar-left { position:relative; z-index:1; }
+  .section-label { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:700; color:var(--dark); line-height:1.1; }
+  .section-link { font-family:'Nunito',sans-serif; font-style:italic; font-weight:400; font-size:.9rem; letter-spacing:.04em; color:var(--purple); text-decoration:none; transition:opacity .2s; }
+  .section-link:hover { opacity:.65; }
+
+  /* Horizontal recipe-book rule under chapter label */
+  .section-rule { display:flex; align-items:center; gap:10px; padding:0 80px 32px; }
+  .section-rule-line { flex:1; height:1px; background:var(--tan); }
+  .section-rule-diamond { color:var(--purple-lt); font-size:.7rem; }
+
+  /* ── PIN ANIMATION ── */
+  .rc-pin-wrap {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    pointer-events: none;
+  }
+  .rc-pin {
+    display: block;
+    animation: pin-sway 3.8s ease-in-out infinite;
+    transform-origin: 10px 3px;
+    filter: drop-shadow(0 3px 4px rgba(100,60,160,.28));
+  }
+  .recipe-card:nth-child(2) .rc-pin { animation-delay: -1.4s; }
+  .recipe-card:nth-child(3) .rc-pin { animation-delay: -2.6s; }
+  @keyframes pin-sway {
+    0%,100% { transform: rotate(-5deg); }
+    50%      { transform: rotate(5deg); }
+  }
+
+  /* ── RECIPE CARDS ── */
+  .recipe-grid { padding:0 80px 80px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  /* Outer gingham border frame */
+  .recipe-card {
+    flex: 1;
+    background-color: #c4b3df;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px),
+      repeating-linear-gradient(0deg,  rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px);
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 3px 5px 28px rgba(100,60,160,.22), 0 1px 4px rgba(0,0,0,.06);
+    cursor: pointer;
+    transition: transform .35s var(--spring), box-shadow .3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-card:hover { transform:translateY(-5px); box-shadow:4px 14px 36px rgba(100,60,160,.28); }
+  .recipe-card:nth-child(2) { transform:rotate(.3deg); }
+  .recipe-card:nth-child(2):hover { transform:rotate(.3deg) translateY(-5px); }
+  .recipe-card:nth-child(3) { transform:rotate(-.25deg); }
+  .recipe-card:nth-child(3):hover { transform:rotate(-.25deg) translateY(-5px); }
+
+  /* Inner cream card */
+  .rc-inner {
+    background-color: #fffdf8;
+    border-radius: 3px;
+    padding: 14px 16px 14px;
+    position: relative;
+    border: 1px solid rgba(155,127,200,.2);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Single image placeholder on recipe cards */
+  .rc-img-placeholder {
+    width: 100%; height: 115px;
+    background: var(--purple-pale);
+    border: 1.5px dashed rgba(155,127,200,.38);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive; font-size: .9rem;
+    color: rgba(120,90,170,.38);
+    margin-bottom: 12px;
+    flex-shrink: 0;
+    cursor: default;
+    letter-spacing: .02em;
+  }
+
+  /* "Recipe" label on same line as rule — like the reference */
+  .rc-label-row { display:flex; align-items:center; gap:10px; margin-bottom:3px; position:relative; }
+  .rc-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--purple);
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .rc-label-line { flex:1; height:1px; background:rgba(155,127,200,.35); }
+
+
+  /* Main title in Caveat — real handwriting feel */
+  .rc-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #1a1208;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    padding-right: 54px; /* clear the floral */
+  }
+  .rc-rule { height: 1px; background: rgba(45,32,20,.45); margin: 6px 0 8px; }
+  .rc-meta { font-size: .72rem; color: var(--body); margin-bottom: 10px; font-weight: 500; }
+  .rc-ing-label { font-size: .6rem; font-weight: 900; letter-spacing: .12em; color: #1a1208; text-transform:uppercase; margin-bottom: 5px; }
+  .rc-ing-list { list-style: disc; padding-left: 16px; }
+  .rc-ing-list li { font-size: .73rem; color: #3a2e20; line-height: 1.7; }
+  .rc-footer { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:9px; border-top:1px solid rgba(155,127,200,.25); }
+  .rc-yield { font-size: .58rem; font-weight: 800; letter-spacing: .12em; color: var(--purple); text-transform: uppercase; }
+  .rc-cta { font-family: 'Caveat', cursive; font-size: .95rem; color: var(--muted); }
+
+  /* ── TEST KITCHEN ── */
+  .kitchen-section { background:var(--bg); padding-bottom:80px; }
+  .kitchen-inner { padding:0 80px; display:flex; gap:0; flex-wrap:wrap; align-items:stretch; }
+  .kitchen-left { flex:1 1 420px; display:flex; flex-direction:column; }
+  .kitchen-cards { display:flex; gap:28px; flex-wrap:wrap; flex:1; align-items:stretch; }
+  /* Mini-cards — same gingham recipe card style */
+  .mini-card {
+    flex:1 1 180px; cursor:pointer;
+    transition:transform .35s var(--spring), box-shadow .3s;
+    display:flex; flex-direction:column;
+    background-color: #c4b3df;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px),
+      repeating-linear-gradient(0deg,  rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px);
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 3px 5px 22px rgba(100,60,160,.18), 0 1px 4px rgba(0,0,0,.05);
+  }
+  .mini-card:hover { transform:translateY(-5px); box-shadow:4px 14px 32px rgba(100,60,160,.26); }
+  .mini-card:nth-child(2) { transform:rotate(.3deg); }
+  .mini-card:nth-child(2):hover { transform:rotate(.3deg) translateY(-5px); }
+  /* Inner white area for mini-card */
+  .mini-inner {
+    background-color: #fffdf8;
+    border-radius: 3px;
+    padding: 12px 14px 12px;
+    position: relative;
+    border: 1px solid rgba(155,127,200,.2);
+    display: flex; flex-direction: column; flex:1;
+    overflow: hidden;
+  }
+  .mini-img { width:100%; height:130px; background:var(--purple-pale); border-radius:2px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-family:'Caveat',cursive; font-size:.85rem; color:rgba(120,90,170,.4); border:1px dashed rgba(155,127,200,.35); flex-shrink:0; }
+  .mini-badge { font-family:'Caveat',cursive; font-size:.82rem; color:var(--purple); margin-bottom:5px; }
+  .mini-title { font-family:'Caveat',cursive; font-size:1.35rem; font-weight:700; color:#1a1208; margin-bottom:4px; line-height:1.2; }
+  .mini-desc { font-size:.72rem; color:var(--body); line-height:1.6; font-weight:400; margin-top:auto; }
+  /* ── RECEIPT PANEL ── */
+  .kitchen-right { flex:0 0 280px; display:flex; flex-direction:column; }
+  .receipt-panel { background:#fffdf6; border:1px solid #ddd5b8; border-radius:3px; box-shadow:2px 4px 14px rgba(0,0,0,.08); overflow:hidden; font-family:'Nunito',sans-serif; flex:1; display:flex; flex-direction:column; }
+  .receipt-inner { flex:1; }
+  /* Torn edge at top */
+  .receipt-tear { height:14px; background:repeating-linear-gradient(-45deg,transparent,transparent 5px,#fffdf6 5px,#fffdf6 10px),linear-gradient(to bottom,#ddd5b8,#ddd5b8); background-size:14px 14px,100% 1px; background-position:0 0,0 100%; }
+  .receipt-tear.bottom { transform:rotate(180deg); }
+  .receipt-inner { padding:16px 20px 20px; flex:1; display:flex; flex-direction:column; }
+  .receipt-store { font-family:'Caveat',cursive; font-size:1.25rem; font-weight:700; text-align:center; color:#3a2c1a; margin-bottom:4px; }
+  .receipt-date { font-size:.58rem; letter-spacing:.06em; text-align:center; color:#9a8464; margin-bottom:8px; }
+  .receipt-dash { font-size:.62rem; color:#c4b090; text-align:center; overflow:hidden; white-space:nowrap; margin:5px 0; letter-spacing:.1em; }
+  .receipt-section-label { font-size:.58rem; font-weight:700; letter-spacing:.2em; color:#7a6448; text-transform:uppercase; margin:4px 0 6px; }
+  .receipt-row { display:flex; justify-content:space-between; align-items:baseline; padding:4px 0; border-bottom:1px dotted rgba(180,155,100,.2); }
+  .receipt-row:last-of-type { border-bottom:none; }
+  .receipt-item { font-size:.72rem; color:#3a2c1a; display:flex; align-items:center; gap:6px; }
+  .receipt-item-emoji { font-size:.9rem; }
+  .receipt-qty { font-family:'Caveat',cursive; font-size:.85rem; color:#8a7050; }
+  .receipt-total-rule { border:none; border-top:1px solid #c4b090; margin:8px 0 4px; }
+  .receipt-total { font-size:.72rem; font-weight:700; color:#3a2c1a; display:flex; justify-content:space-between; letter-spacing:.04em; }
+  .receipt-footer-text { font-size:.58rem; color:#b0966c; text-align:center; margin-top:10px; font-style:italic; line-height:1.6; }
+
+  /* ── EXPERIENCE ── */
+  .experience-section { background:var(--bg2); }
+  .exp-header { background:var(--purple-lt); padding:72px 80px 56px; text-align:center; position:relative; }
+  .exp-header-title { font-family:'Nunito',sans-serif; font-size:3.2rem; font-weight:700; color:var(--dark); margin-bottom:18px; }
+  .exp-header-sub { font-size:1rem; color:var(--dark); font-weight:400; opacity:.7; max-width:600px; margin:0 auto; }
+
+  .org-grid { padding:52px 80px 96px; display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  /* Org cards — gingham recipe card style */
+  .org-card {
+    background-color: #c4b3df;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px),
+      repeating-linear-gradient(0deg,  rgba(255,255,255,.55) 0, rgba(255,255,255,.55) 11px, transparent 11px, transparent 22px);
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 3px 5px 22px rgba(100,60,160,.18), 0 1px 4px rgba(0,0,0,.05);
+    cursor: pointer;
+    transition: transform .4s var(--spring), box-shadow .3s;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .org-card:hover { transform:translateY(-5px); box-shadow:4px 14px 32px rgba(100,60,160,.26); }
+  .org-card:nth-child(2) { transform:rotate(.25deg); }
+  .org-card:nth-child(2):hover { transform:rotate(.25deg) translateY(-5px); }
+  .org-card:nth-child(5) { transform:rotate(-.2deg); }
+  .org-card:nth-child(5):hover { transform:rotate(-.2deg) translateY(-5px); }
+  /* Inner white area */
+  .org-inner {
+    background-color: #fffdf8;
+    border-radius: 3px;
+    padding: 14px 16px 14px;
+    position: relative;
+    border: 1px solid rgba(155,127,200,.2);
+    display: flex; flex-direction: column; flex:1;
+    overflow: hidden;
+  }
+  .org-img-placeholder { width:100%; height:96px; background:var(--purple-pale); border-radius:5px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-family:'Caveat',cursive; font-size:.85rem; color:rgba(120,90,170,.4); border:1.5px dashed rgba(155,127,200,.38); flex-shrink:0; }
+  .org-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:8px; }
+  .org-meta { flex:1; }
+  .org-name { font-family:'Caveat',cursive; font-size:1.45rem; font-weight:700; color:#1a1208; line-height:1.15; margin-bottom:3px; }
+  .org-cat  { font-size:.6rem; font-weight:800; letter-spacing:.14em; color:var(--purple); text-transform:uppercase; }
+  .org-num  { font-size:.6rem; font-weight:700; color:var(--purple-lt); }
+  .org-desc { font-size:.75rem; color:var(--body); line-height:1.7; font-weight:400; margin-bottom:10px; }
+  .org-expand { font-family:'Caveat',cursive; font-size:.95rem; color:var(--muted); margin-top:auto; }
+
+  /* ── FOOTER ── */
+  footer { background:var(--purple-lt); padding:56px 80px 44px; flex-wrap:wrap; gap:24px; border-radius:28px 28px 0 0; }
+  .footer-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+  .footer-connect { font-size:.72rem; font-weight:800; letter-spacing:.24em; color:var(--dark); text-transform:uppercase; margin-bottom:18px; }
+  .footer-icons { display:flex; gap:12px; }
+  .footer-icon { width:44px; height:44px; background:var(--dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; text-decoration:none; color:#fff; transition:opacity .2s; }
+  .footer-icon:hover { opacity:.75; }
+  .footer-quote { font-family:'Nunito',sans-serif; font-size:1.4rem; font-style:italic; color:var(--dark); text-align:right; }
+  /* Footer bottom bar */
+  .footer-bottom { border-top:1px solid rgba(100,70,160,.18); padding-top:18px; display:flex; align-items:center; justify-content:space-between; }
+  .footer-page-num { font-family:'Caveat',cursive; font-size:.9rem; color:rgba(45,32,20,.45); }
+  .footer-end { font-family:'Nunito',sans-serif; font-size:.8rem; font-style:italic; color:rgba(45,32,20,.38); letter-spacing:.08em; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(45,32,20,.55); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px; opacity:0; pointer-events:none; transition:opacity .3s; backdrop-filter:blur(4px); }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal-card { background:#fff; width:100%; max-width:640px; border-radius:24px; box-shadow:0 20px 60px rgba(100,60,160,.2); overflow:hidden; transform:translateY(16px) scale(.97); transition:transform .4s var(--spring); max-height:85vh; overflow-y:auto; }
+  .modal-overlay.open .modal-card { transform:translateY(0) scale(1); }
+  .modal-banner { height:220px; background:var(--tan); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; letter-spacing:.18em; color:rgba(100,85,70,.4); text-transform:uppercase; }
+  .modal-header { background:var(--purple-lt); padding:30px 40px 28px; display:flex; justify-content:space-between; align-items:flex-start; }
+  .modal-role  { font-size:.65rem; font-weight:800; letter-spacing:.2em; color:var(--dark); opacity:.65; text-transform:uppercase; margin-bottom:6px; }
+  .modal-title { font-family:'Nunito',sans-serif; font-size:2.4rem; font-weight:600; color:var(--dark); line-height:1; }
+  .modal-date  { font-size:.68rem; font-weight:600; color:var(--muted); margin-top:6px; letter-spacing:.02em; }
+  .modal-close { background:#fff; border:none; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:.9rem; color:var(--muted); display:flex; align-items:center; justify-content:center; transition:all .2s; flex-shrink:0; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+  .modal-close:hover { background:var(--dark); color:#fff; }
+  .modal-body { padding:32px 40px 40px; }
+  .modal-desc { font-size:1.05rem; color:var(--body); line-height:1.8; font-weight:400; margin-bottom:24px; }
+  .modal-field { background:var(--bg); border:1px solid var(--tan); border-radius:14px; padding:16px 20px; margin-bottom:12px; }
+  .modal-field-label { font-size:.6rem; font-weight:800; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; margin-bottom:6px; }
+  .modal-field-val   { font-family:'Nunito',sans-serif; font-size:.95rem; color:var(--muted); font-weight:500; }
+  .modal-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
+  .modal-tag  { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--purple-pale); color:var(--purple); padding:7px 16px; border-radius:30px; }
+
+  /* Modal rich content sections */
+  .modal-section-head {
+    font-size: .6rem; font-weight: 800; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--muted);
+    margin: 24px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-section-head::after {
+    content: ''; flex: 1; height: 1px; background: var(--tan);
+  }
+  .modal-ing-list {
+    list-style: none; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .modal-ing-list li {
+    background: var(--purple-pale);
+    border: 1px solid rgba(155,127,200,.25);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: .72rem; font-weight: 600; color: var(--purple);
+  }
+  .modal-impact-list {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 4px;
+  }
+  .modal-impact-list li {
+    font-size: .88rem; color: var(--body); line-height: 1.65;
+    padding-left: 18px; position: relative;
+  }
+  .modal-impact-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--purple); font-size: .8rem;
+  }
+  .modal-tools-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .modal-tool-pill {
+    background: var(--bg2);
+    border: 1px solid var(--tan);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: .7rem; font-weight: 700;
+    color: var(--body);
+  }
+  .modal-ext-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .75rem; font-weight: 700;
+    color: var(--purple);
+    background: var(--purple-pale);
+    border: 1px solid rgba(155,127,200,.28);
+    border-radius: 20px;
+    padding: 6px 14px;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .modal-ext-link:hover { background: var(--purple); color: #fff; }
+  .modal-collection-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.25rem; font-weight: 700;
+    color: var(--dark); margin: 22px 0 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* Modal video row */
+  .modal-videos-section { margin-bottom: 28px; }
+  .modal-videos-label {
+    font-size: .6rem; font-weight: 800; letter-spacing: .18em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .modal-videos-row { display: flex; gap: 10px; }
+  /* Image boxes (landscape placeholders) */
+  .modal-imgs-row { display: flex; gap: 10px; margin-bottom: 4px; }
+  .modal-img-box {
+    flex: 1; height: 108px;
+    background: var(--purple-pale);
+    border: 1.5px dashed rgba(155,127,200,.4);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive; font-size: .85rem;
+    color: rgba(120,90,170,.38);
+    overflow: hidden;
+  }
+  .modal-img-box-lg {
+    width: 100%; height: 200px;
+    background: var(--purple-pale);
+    border: 1.5px dashed rgba(155,127,200,.4);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive; font-size: .9rem;
+    color: rgba(120,90,170,.38);
+    margin-bottom: 10px; flex-shrink: 0;
+  }
+  .modal-video-box-lg {
+    width: 100%; aspect-ratio: 16/9;
+    background: var(--purple-pale);
+    border: 1.5px dashed rgba(155,127,200,.4);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    margin-top: 10px;
+  }
+  .modal-video-box-lg::before {
+    content: '';
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(155,127,200,.25);
+    position: absolute;
+  }
+  .modal-video-box-lg::after {
+    content: '';
+    position: absolute;
+    width: 0; height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 16px solid rgba(155,127,200,.6);
+    margin-left: 4px;
+  }
+  .modal-video-box {
+    flex: 1; aspect-ratio: 9/16;
+    background: var(--purple-pale);
+    border: 1.5px dashed rgba(155,127,200,.4);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .modal-video-box::before {
+    content: '';
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(155,127,200,.25);
+    position: absolute;
+  }
+  .modal-video-box::after {
+    content: '';
+    position: absolute;
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 13px solid rgba(155,127,200,.6);
+    margin-left: 3px;
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE — tablet ≤ 900px
+  ═══════════════════════════════════════ */
+  @media (max-width: 900px) {
+    /* Card scene tablet */
+    .card-stack { transform: scale(0.85); }
+    .card-scene { gap: 28px; }
+
+    /* Navbar */
+    .navbar { padding: 16px 28px; }
+    .navbar-links { gap: 18px; }
+    .navbar-links li:nth-child(1),
+    .navbar-links li:nth-child(2),
+    .navbar-links li:nth-child(3) { display: none; }
+
+    /* Hero: stack vertically */
+    .hero { flex-direction: column; padding: 52px 32px 64px; gap: 48px; }
+    .hero-left { max-width: 100%; }
+    .hero-right { flex: unset; width: 100%; padding-left: 0; justify-content: center; }
+    .polaroid-collage { margin: 0 auto; }
+
+    /* Sections */
+    .section-bar { padding: 44px 32px 22px; }
+    .section-rule { padding: 0 32px 26px; }
+
+    /* Recipe grid: 2 col */
+    .recipe-grid { padding: 0 32px 60px; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+    /* Test kitchen */
+    .kitchen-inner { padding: 0 32px; flex-direction: column; }
+    .kitchen-left { padding: 0 0 40px 0 !important; }
+    .kitchen-right { flex: unset; width: 100%; }
+
+    /* Org / experience */
+    .exp-header { padding: 56px 32px 44px; }
+    .org-grid { padding: 40px 32px 72px; grid-template-columns: repeat(2, 1fr); }
+
+    /* Footer */
+    footer { padding: 48px 32px 40px; }
+    .footer-top { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .footer-quote { text-align: left; font-size: 1.1rem; }
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE — mobile ≤ 600px
+  ═══════════════════════════════════════ */
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+
+    /* Card scene mobile */
+    .card-stack { transform: scale(0.72); }
+    .card-scene { gap: 20px; }
+    .open-hint { font-size: .9rem; }
+
+    /* Navbar: just logo + CTA */
+    .navbar { padding: 14px 20px; }
+    .navbar-links li:nth-child(1),
+    .navbar-links li:nth-child(2),
+    .navbar-links li:nth-child(3) { display: none; }
+    .navbar-links li:nth-child(4) a { padding: 8px 16px; font-size: .72rem; }
+
+    /* Hero */
+    .hero { padding: 36px 20px 52px; gap: 36px; }
+    .hero-big { font-size: 3.4rem; }
+    .hero-para { font-size: .9rem; }
+    .polaroid-collage { width: 300px; height: 330px; }
+    .polaroid-wrap { max-width: 280px; left: 20px; }
+    .polaroid-back { max-width: 280px; left: -20px; top: 18px; }
+    .hero-ivey-card { max-width: 100%; }
+
+    /* Section headers */
+    .section-bar { padding: 36px 20px 18px; }
+    .section-rule { padding: 0 20px 22px; }
+    .section-label { font-size: 1.7rem; }
+
+    /* Recipe grid: 1 col */
+    .recipe-grid { padding: 0 20px 48px; grid-template-columns: 1fr; gap: 24px; }
+
+    /* Test kitchen */
+    .kitchen-inner { padding: 0 20px; }
+    .kitchen-cards { flex-direction: column; }
+
+    /* Org grid: 1 col */
+    .exp-header { padding: 44px 20px 36px; }
+    .exp-header-title { font-size: 2.2rem; }
+    .org-grid { padding: 32px 20px 56px; grid-template-columns: 1fr; }
+
+    /* Footer */
+    footer { padding: 40px 20px 32px; }
+    .footer-quote { font-size: 1rem; }
+
+    /* Modal */
+    .modal-overlay { padding: 16px; }
+    .modal-header { padding: 22px 24px 20px; }
+    .modal-title { font-size: 1.8rem; }
+    .modal-body { padding: 24px 24px 32px; }
+    .modal-videos-row { flex-direction: column; gap: 12px; }
+    .modal-video-box { aspect-ratio: 16/9; flex: unset; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ CARD SCENE (intro) ═══ -->
+<div class="card-scene" onclick="openBook()" id="bookScene">
+  <div class="card-stack">
+    <!-- Fan cards — stacked behind, fly out on click -->
+    <div class="intro-card fan-card fan-card-1"><div class="fan-card-inner"></div></div>
+    <div class="intro-card fan-card fan-card-2"><div class="fan-card-inner"></div></div>
+    <div class="intro-card fan-card fan-card-3"><div class="fan-card-inner"></div></div>
+    <!-- Main card — always on top -->
+    <div class="intro-card main-intro-card">
+      <div class="main-card-inner" style="position:relative;">
+        <div class="main-card-eyebrow">Portfolio</div>
+        <div class="main-card-title">Megan's<br/>Recipe Book</div>
+        <div class="main-card-rule"></div>
+        <div class="main-card-sub">Marketing · Product · Community</div>
+      </div>
+    </div>
+  </div>
+  <div class="open-hint">click to open ♡</div>
+</div>
+
+<!-- ═══ PORTFOLIO ═══ -->
+<div class="portfolio" id="portfolio">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="nav-logo">Megan Li</div>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="#recipes">Recipes</a></li>
+      <li><a href="#test-kitchen">Test Kitchen</a></li>
+      <li><a href="#beyond">Beyond the Classroom</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-big">Hi! I'm Megan</div>
+      <p class="hero-para">Hi! I'm Megan, a business student who loves turning ideas into meaningful projects, creating spaces for people to connect, and learning through hands-on experience.</p>
+
+      <div style="width:48px;height:1px;background:rgba(155,127,200,.35);margin-bottom:24px;"></div>
+      <div class="hero-ivey-card">
+        <div class="ivey-logo">
+          <!-- Replace src="" with your Ivey logo image path -->
+          <img id="iveyLogo" src="" alt="Ivey Business School" style="height:44px; width:auto; object-fit:contain; display:block;" />
+        </div>
+        <div>
+          <div class="ivey-text-label">Currently studying at</div>
+          <div class="ivey-text-val">Ivey Business School,<br/>Western University</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right" style="position:relative;">
+      <div class="polaroid-collage">
+        <!-- Back polaroid -->
+        <div class="polaroid-back">
+          <div class="polaroid-back-img"></div>
+          <div class="polaroid-back-caption">good times ✨</div>
+        </div>
+        <!-- Front polaroid (clickable) -->
+        <div class="polaroid-wrap" onclick="cyclePolaroid()" id="polaroidWrap">
+          <div class="polaroid">
+            <div class="polaroid-img" id="polaroidImg" style="background:var(--tan);">✦ add photo here ✦</div>
+            <div class="polaroid-caption" id="polaroidCaption">summer 2024 🌸</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECTS -->
+  <section class="projects-section" id="recipes">
+    <div class="section-bar">
+      <div class="section-bar-left">
+        <div class="section-label">Featured Recipes</div>
+      </div>
+    </div>
+    <div class="section-rule">
+      <div class="section-rule-line"></div>
+      <span class="section-rule-diamond">◆</span>
+      <div class="section-rule-line"></div>
+    </div>
+    <div class="recipe-grid">
+
+      <!-- Recipe Card 01 -->
+      <div class="recipe-card" onclick="openModal('inoki')">
+        <div class="rc-pin-wrap">
+          <svg class="rc-pin" width="20" height="34" viewBox="0 0 20 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="9.5" fill="#7a5fa8"/>
+            <circle cx="10" cy="10" r="8.5" fill="#9b7fc8"/>
+            <circle cx="7" cy="6.5" r="3" fill="rgba(255,255,255,.4)"/>
+            <ellipse cx="10" cy="10" rx="9.5" ry="9.5" fill="none" stroke="#6a4f9a" stroke-width=".8" opacity=".5"/>
+            <path d="M8.5 18 Q10 19 11.5 18 L11 33 Q10 34 9 33 Z" fill="#6a4f9a"/>
+          </svg>
+        </div>
+        <div class="rc-inner">
+          <!-- Botanical corner illustration -->
+          <div class="rc-img-placeholder">✦ add image ✦</div>
+          <div class="rc-label-row">
+            <div class="rc-label-line"></div>
+          </div>
+          <div class="rc-title">Product &amp; Marketing Intern</div>
+          <div class="rc-rule"></div>
+          <div class="rc-meta"><strong>Inoki Bathhouse</strong> &nbsp;·&nbsp; Apr - Sep 2026</div>
+          <div class="rc-ing-label">Ingredients</div>
+          <ul class="rc-ing-list">
+            <li>Product Development</li>
+            <li>Shopify & Social Media</li>
+            <li>Klaviyo Email Marketing</li>
+          </ul>
+          <div class="rc-footer">
+            <span class="rc-cta">view recipe →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recipe Card 02 -->
+      <div class="recipe-card" onclick="openModal('enya')">
+        <div class="rc-pin-wrap">
+          <svg class="rc-pin" width="20" height="34" viewBox="0 0 20 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="9.5" fill="#7a5fa8"/>
+            <circle cx="10" cy="10" r="8.5" fill="#9b7fc8"/>
+            <circle cx="7" cy="6.5" r="3" fill="rgba(255,255,255,.4)"/>
+            <ellipse cx="10" cy="10" rx="9.5" ry="9.5" fill="none" stroke="#6a4f9a" stroke-width=".8" opacity=".5"/>
+            <path d="M8.5 18 Q10 19 11.5 18 L11 33 Q10 34 9 33 Z" fill="#6a4f9a"/>
+          </svg>
+        </div>
+        <div class="rc-inner">
+          <div class="rc-img-placeholder">✦ add image ✦</div>
+          <div class="rc-label-row">
+            <div class="rc-label-line"></div>
+          </div>
+          <div class="rc-title">Social Media &amp; SEO Intern</div>
+          <div class="rc-rule"></div>
+          <div class="rc-meta"><strong>Enya Mond</strong> &nbsp;·&nbsp; Jun - Aug 2025</div>
+          <div class="rc-ing-label">Ingredients</div>
+          <ul class="rc-ing-list">
+            <li>Influencer strategy</li>
+            <li>Brand photo shoots</li>
+            <li>Social media content</li>
+          </ul>
+          <div class="rc-footer">
+            <span class="rc-cta">view recipe →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recipe Card 03 -->
+      <div class="recipe-card" onclick="openModal('vita')">
+        <div class="rc-pin-wrap">
+          <svg class="rc-pin" width="20" height="34" viewBox="0 0 20 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="9.5" fill="#7a5fa8"/>
+            <circle cx="10" cy="10" r="8.5" fill="#9b7fc8"/>
+            <circle cx="7" cy="6.5" r="3" fill="rgba(255,255,255,.4)"/>
+            <ellipse cx="10" cy="10" rx="9.5" ry="9.5" fill="none" stroke="#6a4f9a" stroke-width=".8" opacity=".5"/>
+            <path d="M8.5 18 Q10 19 11.5 18 L11 33 Q10 34 9 33 Z" fill="#6a4f9a"/>
+          </svg>
+        </div>
+        <div class="rc-inner">
+          <div class="rc-img-placeholder">✦ add image ✦</div>
+          <div class="rc-label-row">
+            <div class="rc-label-line"></div>
+          </div>
+          <div class="rc-title">Partnerships &amp; Marketing Intern</div>
+          <div class="rc-rule"></div>
+          <div class="rc-meta"><strong>Vita Learning</strong> &nbsp;·&nbsp; Apr 2025 - Apr 2026</div>
+          <div class="rc-ing-label">Ingredients</div>
+          <ul class="rc-ing-list">
+            <li>Campus partnerships</li>
+            <li>Social media strategy</li>
+            <li>Data analysis</li>
+          </ul>
+          <div class="rc-footer">
+            <span class="rc-cta">view recipe →</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <!-- TEST KITCHEN -->
+  <section class="kitchen-section" id="test-kitchen">
+    <div class="section-bar" style="padding-bottom:24px;">
+      <div class="section-bar-left">
+        <div class="section-label">From the Test Kitchen</div>
+      </div>
+    </div>
+    <div class="section-rule">
+      <div class="section-rule-line"></div>
+      <span class="section-rule-diamond">◆</span>
+      <div class="section-rule-line"></div>
+    </div>
+    <div class="kitchen-inner">
+      <div class="kitchen-left" style="padding:0 36px 0 0;">
+        <div class="kitchen-cards">
+          <div class="mini-card" onclick="openModal('bubbli')">
+            <div class="mini-inner">
+              <div class="mini-img">✦ add photo ✦</div>
+              <div class="rc-label-row"><div class="rc-label-line"></div></div>
+              <div class="mini-title">shopbubbli</div>
+              <div class="rc-rule"></div>
+              <div class="rc-ing-label">Ingredients</div>
+              <ul class="rc-ing-list">
+                <li>Entrepreneurship</li>
+                <li>Product Design &amp; Handmade Production</li>
+                <li>E-commerce &amp; Shopify</li>
+              </ul>
+            </div>
+          </div>
+          <div class="mini-card" onclick="openModal('sweets')">
+            <div class="mini-inner">
+              <div class="mini-img">✦ add photo ✦</div>
+              <div class="rc-label-row"><div class="rc-label-line"></div></div>
+              <div class="mini-title">MegsSweets</div>
+              <div class="rc-rule"></div>
+              <div class="rc-ing-label">Ingredients</div>
+              <ul class="rc-ing-list">
+                <li>Creative Entrepreneurship</li>
+                <li>Baking &amp; Product Development</li>
+                <li>Community Fundraising</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kitchen-right">
+        <div class="receipt-panel">
+          <div class="receipt-tear"></div>
+          <div class="receipt-inner">
+            <div class="receipt-store">Megan's Kitchen</div>
+            <div class="receipt-dash">- - - - - - - - - - - - - -</div>
+            <div class="receipt-section-label">Ingredients</div>
+            <div class="receipt-dash">· · · · · · · · · · · · · ·</div>
+            <div class="receipt-row">
+              <span class="receipt-item"><span class="receipt-item-emoji">🎨</span> Canva / Figma / Capcut</span>
+              <span class="receipt-qty">1 cup</span>
+            </div>
+            <div class="receipt-row">
+              <span class="receipt-item"><span class="receipt-item-emoji">🌐</span> HTML &amp; Shopify</span>
+              <span class="receipt-qty">½ cup</span>
+            </div>
+            <div class="receipt-row">
+              <span class="receipt-item"><span class="receipt-item-emoji">📊</span> Analytics</span>
+              <span class="receipt-qty">as needed</span>
+            </div>
+            <div class="receipt-row">
+              <span class="receipt-item"><span class="receipt-item-emoji">🤝</span> Collaboration</span>
+              <span class="receipt-qty">always!</span>
+            </div>
+            <div class="receipt-dash" style="margin-top:10px;">- - - - - - - - - - - - - -</div>
+            <hr class="receipt-total-rule"/>
+            <div class="receipt-total"><span>Result</span><span>🍒 Delicious</span></div>
+          </div>
+          <div class="receipt-tear bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="experience-section" id="beyond">
+    <div class="exp-header">
+      <div class="exp-header-title">Beyond the Classroom</div>
+      <p class="exp-header-sub">The communities, teams, and experiences that have shaped how I lead and collaborate.</p>
+    </div>
+    <div class="org-grid">
+      <div class="org-card" onclick="openModal('sophing')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">Social Science Soph</div><div class="org-cat">Orientation Leader</div></div><div class="org-num">01</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Supported 150+ incoming students through university transition, mentorship, and 20+ Orientation Week events.</div>
+          <div class="org-expand">expand this story →</div>
+        </div>
+      </div>
+      <div class="org-card" onclick="openModal('taw')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">TAW</div><div class="org-cat">VP of Promotions</div></div><div class="org-num">02</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Generated 10M+ social media views and led promotional strategy for 12+ events including Night Market.</div>
+          <div class="org-expand">expand this story →</div>
+        </div>
+      </div>
+      <div class="org-card" onclick="openModal('ips')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">Ivey Product Society</div><div class="org-cat">Director of Communications</div></div><div class="org-num">03</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Helping students explore product management and break into tech through events, resources, and fellowship.</div>
+        </div>
+      </div>
+      <div class="org-card" onclick="openModal('ignition')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">Ignition Hacks</div><div class="org-cat">Director of Finance</div></div><div class="org-num">04</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Secured 28 sponsors and raised $10K+ to fund a hackathon for 500+ participants and 75+ projects.</div>
+          <div class="org-expand">expand this story →</div>
+        </div>
+      </div>
+      <div class="org-card" onclick="openModal('wuksa')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">WUKSA</div><div class="org-cat">Director of Events</div></div><div class="org-num">05</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Led Korea Day, attracting 500+ students through Korean food, performances, games, and cultural experiences.</div>
+          <div class="org-expand">expand this story →</div>
+        </div>
+      </div>
+      <div class="org-card" onclick="openModal('fintech')">
+        <div class="org-inner">
+          <div class="rc-label-row"><div class="rc-label-line"></div></div>
+          <div class="org-img-placeholder">✦ add image ✦</div>
+          <div class="org-top"><div class="org-meta"><div class="org-name">Ivey Fintech</div><div class="org-cat">Consulting Analyst</div></div><div class="org-num">06</div></div>
+          <div class="rc-rule"></div>
+          <div class="org-desc">Developed strategic recommendations for Super.com and delivered a client presentation in under one week.</div>
+          <div class="org-expand">expand this story →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-connect">Let's Connect</div>
+        <div class="footer-icons">
+          <a href="https://www.linkedin.com/in/meganmli/" class="footer-icon">in</a>
+          <a href="mailto:mli.hba2028@ivey.ca" class="footer-icon" style="font-size:.9rem;">✉</a>
+        </div>
+      </div>
+      <div class="footer-quote">"Let's create something worth sharing." ♡</div>
+    </div>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-card">
+    <div class="modal-banner">ADD PROJECT IMAGE</div>
+    <div class="modal-header">
+      <div><div class="modal-role" id="modalRole"></div><div class="modal-title" id="modalTitle"></div><div class="modal-date" id="modalDate"></div></div>
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Content injected by openModal() -->
+    </div>
+  </div>
+</div>
+
+<script>
+  function openBook() {
+    const scene = document.getElementById('bookScene');
+    if (scene.classList.contains('opening')) return;
+    scene.classList.add('opening');
+    // After fan cards animate out, fade the scene and reveal portfolio
+    setTimeout(() => {
+      scene.classList.add('fade-out');
+      setTimeout(() => {
+        scene.style.display = 'none';
+        document.getElementById('portfolio').classList.add('visible');
+      }, 520);
+    }, 1200);
+  }
+  const polaroidFrames = [
+    { caption: 'summer 2024 🌸', bg: 'var(--tan)',       rotate: 'rotate(2.5deg)',  text: '✦ add photo here ✦' },
+    { caption: 'always creating ✨', bg: '#d8ecd8',      rotate: 'rotate(-2.8deg)', text: '✦ add photo here ✦' },
+    { caption: 'adventures 🌿',   bg: '#dde4f2',          rotate: 'rotate(1deg)',    text: '✦ add photo here ✦' },
+  ];
+  let polaroidIdx = 0;
+  function cyclePolaroid() {
+    polaroidIdx = (polaroidIdx + 1) % polaroidFrames.length;
+    const f = polaroidFrames[polaroidIdx];
+    const wrap = document.getElementById('polaroidWrap');
+    const img  = document.getElementById('polaroidImg');
+    const cap  = document.getElementById('polaroidCaption');
+    wrap.style.transform = f.rotate;
+    img.style.background = f.bg;
+    cap.textContent = f.caption;
+    wrap.style.transition = 'transform .5s cubic-bezier(0.34,1.56,0.64,1)';
+  }
+  const data = {
+    inoki: {
+      role: 'Product & Marketing Intern',
+      title: 'Inoki Bathhouse',
+      date: 'April 2026 - September 2026',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Inoki Bathhouse creates luxury spa products that transform everyday baths into globally inspired wellness rituals, partnered with world-class hotels including the <strong>Four Seasons</strong>, <strong>St. Regis</strong>, and <strong>Ritz Carlton</strong>.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://inokibathhouse.com/en-ca" target="_blank" rel="noopener" class="modal-ext-link">🌐 inokibathhouse.com</a>
+          <a href="https://www.instagram.com/inoki_bathhouse" target="_blank" rel="noopener" class="modal-ext-link">📸 @inoki_bathhouse</a>
+        </div>
+
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Developed and launched the limited-edition <strong>Flower Bag and Lavender Milk Tea Summer Collection</strong>.</li>
+          <li>Drove <strong>300+ sales</strong> across three marketing campaigns.</li>
+          <li>Built an AI-powered knowledge repository using Claude Cowork and Notion AI, streamlining <strong>200+ customer communications</strong> and reducing manual work for the team.</li>
+          <li>Managed the content calendar and produced <strong>120+ posts</strong>, generating <strong>500K+ engagements</strong> across Instagram, TikTok, and Facebook.</li>
+        </ul>
+
+        <div class="modal-videos-section" style="margin-top:18px;">
+          <div class="modal-videos-label">Videos</div>
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+
+        <div class="modal-section-head">🌸 Flower Bag &amp; Lavender Milk Tea Bath</div>
+        <ul class="modal-impact-list">
+          <li>Inspired by a visit to the Toronto Flower Market, pitched and developed the limited-edition collection from concept to its <strong>August 2026 launch</strong>.</li>
+          <li>Sold <strong>150+ bundles</strong> featuring a durable, three-layer Flower Bag designed to carry bouquets, farmers' market finds, yoga mats, picnic essentials, and more.</li>
+        </ul>
+        <div class="modal-videos-section" style="margin-top:14px;">
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+
+        <div class="modal-section-head">Tools</div>
+        <div class="modal-tools-row">
+          <span class="modal-tool-pill">Capcut</span>
+          <span class="modal-tool-pill">Figma</span>
+          <span class="modal-tool-pill">Notion AI</span>
+          <span class="modal-tool-pill">Claude Cowork</span>
+          <span class="modal-tool-pill">Kive AI</span>
+          <span class="modal-tool-pill">Shopify</span>
+          <span class="modal-tool-pill">Klaviyo Email Marketing</span>
+        </div>
+      `
+    },
+    enya: {
+      role: 'Social Media & SEO Intern',
+      title: 'Enya Mond',
+      date: 'June 2025 - August 2025',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Enya Mond is a luxury diaper bag company creating functional, thoughtfully designed bags that help women navigate motherhood with confidence and style.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://enyamond.com/" target="_blank" rel="noopener" class="modal-ext-link">🌐 enyamond.com</a>
+          <a href="https://www.instagram.com/enyamond/" target="_blank" rel="noopener" class="modal-ext-link">📸 @enyamond</a>
+        </div>
+
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Developed a modern tote bag as a gift-with-purchase, extending Enya Mond's luxury brand experience beyond its core products.</li>
+          <li>Led creative direction and on-set coordination for <strong>3 brand photo shoots</strong>, supporting launches that reached <strong>48K+ viewers</strong> and earned <strong>5K+ engagements</strong>.</li>
+          <li>Developed and executed an influencer strategy in partnership with <strong>20 motherhood-focused creators</strong>, authentically showcasing the brand's fashion-meets-function positioning.</li>
+        </ul>
+
+        <div class="modal-videos-section" style="margin-top:18px;">
+          <div class="modal-videos-label">Videos</div>
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+
+        <div class="modal-section-head">Tools</div>
+        <div class="modal-tools-row">
+          <span class="modal-tool-pill">Notion AI</span>
+          <span class="modal-tool-pill">Capcut</span>
+          <span class="modal-tool-pill">Figma</span>
+          <span class="modal-tool-pill">Canva</span>
+        </div>
+      `
+    },
+    vita: {
+      role: 'Partnerships & Marketing Intern',
+      title: 'Vita Learning',
+      date: 'April 2025 - April 2026',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Vita Learning is an AI-powered study platform that helps students learn more effectively through personalized academic support and study tools.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://www.vitalearning.ca/" target="_blank" rel="noopener" class="modal-ext-link">🌐 vitalearning.ca</a>
+        </div>
+
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Partnered with Western's Social Science and Health Science orientation teams to distribute exam kits to <strong>10,000+ first-year students</strong>, driving <strong>1,000 new app sign-ups</strong>.</li>
+          <li>Developed the content strategy for an AI-powered study app, producing <strong>50+ educational resources</strong> that generated <strong>10K+ engagements</strong>.</li>
+          <li>Translated user feedback and engagement data into brand and product improvements, including a student-focused voice, logo concepts, and mascot ideas — informing a roadmap targeting a <strong>30% increase in user retention</strong>.</li>
+        </ul>
+
+        <div class="modal-videos-section" style="margin-top:18px;">
+          <div class="modal-videos-label">Videos</div>
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+
+        <div class="modal-section-head">Tools</div>
+        <div class="modal-tools-row">
+          <span class="modal-tool-pill">Capcut</span>
+          <span class="modal-tool-pill">Figma</span>
+          <span class="modal-tool-pill">Canva</span>
+        </div>
+      `
+    },
+    bubbli: {
+      role: 'Founder · Side Project',
+      title: 'shopbubbli',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Shopbubbli is a handmade accessories brand I co-founded with my sister, growing our shared creative hobby into an online community of <strong>12K+ followers</strong> and <strong>1,000+ customers</strong>.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://shopbubbli.myshopify.com/" target="_blank" rel="noopener" class="modal-ext-link">🌐 shopbubbli.myshopify.com</a>
+          <a href="https://www.instagram.com/shopbubbli/" target="_blank" rel="noopener" class="modal-ext-link">📸 @shopbubbli</a>
+        </div>
+
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-imgs-row">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+
+        <div class="modal-videos-section" style="margin-top:18px;">
+          <div class="modal-videos-label">Videos</div>
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+      `
+    },
+    sweets: {
+      role: 'Founder · Side Project',
+      title: 'MegsSweets',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">What began as a passion for baking grew into a small business generating <strong>$6K+ in revenue</strong> from local customers, while also raising funds for my high school's DECA Club and Community Council through bake sales.</p>
+
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-imgs-row">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+        <div class="modal-imgs-row" style="margin-top:10px;">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+      `
+    },
+    sophing: {
+      role: 'Orientation Leader',
+      title: 'Social Science Soph',
+      date: 'April 2025 - April 2026',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">As a Social Science Orientation Leader at Western University, I supported <strong>150+ incoming students</strong> through their transition to university by providing mentorship, building community, and helping deliver <strong>20+ Orientation Week events</strong>.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://www.instagram.com/social.sci.sophs" target="_blank" rel="noopener" class="modal-ext-link">📸 @social.sci.sophs</a>
+          <a href="https://www.oweek.ca/sophs/" target="_blank" rel="noopener" class="modal-ext-link">🌐 oweek.ca</a>
+        </div>
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-img-box-lg">✦ add image ✦</div>
+        <div class="modal-imgs-row">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+      `
+    },
+    taw: {
+      role: 'VP of Promotions',
+      title: 'TAW',
+      date: 'September 2024 - Present',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">The Taiwanese Association at Western is one of the university's largest Asian student organizations, building community and celebrating Taiwanese culture through social events, cultural programming, and its flagship Night Market.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://www.instagram.com/tawuwo" target="_blank" rel="noopener" class="modal-ext-link">📸 @tawuwo</a>
+        </div>
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Progressed from Executive to Director of Communications and VP of Promotions, taking on increasing leadership across brand strategy and event marketing.</li>
+          <li>Generated <strong>10M+ social media views</strong>, increased engagement by <strong>40%</strong>, and grew the community to <strong>2,000+ followers</strong>.</li>
+          <li>Led promotional strategy for <strong>12+ events</strong>, including Night Market, which attracted <strong>500+ attendees</strong> and generated <strong>$10K+ in sales</strong>.</li>
+        </ul>
+        <div class="modal-section-head">Photos &amp; Videos</div>
+        <div class="modal-img-box-lg">✦ add image ✦</div>
+        <div class="modal-videos-row">
+          <div class="modal-video-box"></div>
+          <div class="modal-video-box"></div>
+          <div class="modal-video-box"></div>
+        </div>
+        <div class="modal-video-box-lg"></div>
+      `
+    },
+    ips: {
+      role: 'Director of Communications',
+      title: 'Ivey Product Society',
+      date: 'September 2025 - May 2026',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">The Ivey Product Society helps Western and Ivey students explore product management and break into technology through industry events, career resources, an HBA2 course, and an annual product fellowship.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://www.instagram.com/iveyproductsociety_" target="_blank" rel="noopener" class="modal-ext-link">📸 @iveyproductsociety_</a>
+          <a href="https://iveyproductsociety.com/" target="_blank" rel="noopener" class="modal-ext-link">🌐 iveyproductsociety.com</a>
+        </div>
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-img-box-lg">✦ add image ✦</div>
+      `
+    },
+    ignition: {
+      role: 'Director of Finance',
+      title: 'Ignition Hacks',
+      date: 'August 2023 - August 2024',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Ignition Hacks is a student-led hackathon that brings together <strong>500+ participants</strong> to build innovative technology projects and develop their skills through workshops and mentorship.</p>
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Secured <strong>28 sponsors</strong> and raised <strong>$10K+</strong> to fund an accessible hackathon experience.</li>
+          <li>Managed event budgets and sponsorships supporting <strong>500+ participants</strong> and <strong>75+ submitted projects</strong>.</li>
+        </ul>
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-img-box-lg">✦ add image ✦</div>
+        <div class="modal-imgs-row">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+      `
+    },
+    wuksa: {
+      role: 'Director of Events',
+      title: 'WUKSA',
+      date: 'September 2025 - April 2026',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">As Director of Events for the Western University Korean Students' Association, I led Korea Day, its flagship cultural event attracting <strong>500+ students</strong> through Korean food, performances, games, and interactive experiences.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://www.instagram.com/western_ksa" target="_blank" rel="noopener" class="modal-ext-link">📸 @western_ksa</a>
+        </div>
+        <div class="modal-section-head">Photos</div>
+        <div class="modal-img-box-lg">✦ add image ✦</div>
+        <div class="modal-imgs-row">
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+          <div class="modal-img-box">✦ add image ✦</div>
+        </div>
+      `
+    },
+    fintech: {
+      role: 'Consulting Analyst',
+      title: 'Ivey Fintech',
+      date: 'September 2024 - May 2025',
+      html: `
+        <div class="modal-section-head">What it is</div>
+        <p style="font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:6px;">Ivey Fintech is Canada's largest student fintech organization, providing students with industry education, research, events, and pro-bono consulting opportunities with fintech companies.</p>
+        <div style="display:flex;gap:12px;margin:12px 0 4px;flex-wrap:wrap;">
+          <a href="https://iveyfintechclub.ca/" target="_blank" rel="noopener" class="modal-ext-link">🌐 iveyfintechclub.ca</a>
+        </div>
+        <div class="modal-section-head">Impact</div>
+        <ul class="modal-impact-list">
+          <li>Worked with a five-person team to develop strategic recommendations for <strong>Super.com</strong> and delivered a <strong>15-slide client presentation</strong> in under one week.</li>
+        </ul>
+        <div class="modal-section-head">Project</div>
+        <div style="display:flex;gap:12px;margin:4px 0 8px;flex-wrap:wrap;">
+          <a href="https://canva.link/iwgmq57y49i20ku" target="_blank" rel="noopener" class="modal-ext-link">📊 View the Super.com Consulting Deck</a>
+        </div>
+      `
+    },
+  };
+  function openModal(id) {
+    const d = data[id]; if(!d) return;
+    document.getElementById('modalRole').textContent  = d.role;
+    document.getElementById('modalTitle').textContent = d.title;
+    const dateEl = document.getElementById('modalDate');
+    if (dateEl) dateEl.textContent = d.date || '';
+    if (d.html) {
+      // Rich custom body — replace body content entirely
+      document.getElementById('modalBody').innerHTML = d.html;
+    } else {
+      // Generic template
+      document.getElementById('modalBody').innerHTML = `
+        <p class="modal-desc">${d.desc || ''}</p>
+        <div class="modal-videos-section">
+          <div class="modal-videos-label">Videos</div>
+          <div class="modal-videos-row">
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+            <div class="modal-video-box"></div>
+          </div>
+        </div>
+        <div class="modal-field"><div class="modal-field-label">Your Role</div><div class="modal-field-val">Add your specific title or position here.</div></div>
+        <div class="modal-field"><div class="modal-field-label">Key Impact</div><div class="modal-field-val">${d.impact || ''}</div></div>
+        <div class="modal-tags">${(d.tags||[]).map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
+      `;
+    }
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal(e) { if(e.target===document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); }
+  function closeModalBtn() { document.getElementById('modalOverlay').classList.remove('open'); }
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('modalOverlay').classList.remove('open'); });
+</script>
+</body>
+</html>
